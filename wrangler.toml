@@ -1,0 +1,31 @@
+name = "roleplayed-ai"
+main = "src/worker.ts"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Static site (public/) with the Worker handling /api/* first.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*"]
+
+# Demo requests from the contact form.
+[[kv_namespaces]]
+binding = "LEADS"
+id = "8372b46cbc0d4ba0861eef44380a0d9d"
+
+# Per-visitor limit on API calls, to cap AI spend from the public demo.
+[[ratelimits]]
+name = "DEMO_LIMITER"
+namespace_id = "2026"
+simple = { limit = 20, period = 60 }
+
+[observability]
+enabled = true
+
+# Switch roleplayed.ai to this site only after the app has moved to app.roleplayed.ai
+# and the old redirect rule or DNS record for roleplayed.ai is removed. See README.
+# routes = [
+#   { pattern = "roleplayed.ai", custom_domain = true },
+#   { pattern = "www.roleplayed.ai", custom_domain = true },
+# ]
